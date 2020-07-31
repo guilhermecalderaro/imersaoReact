@@ -18,8 +18,9 @@ function Home() {
       />
 
       {dadosIniciais.categorias.map((cat, i) => {
-        if (i === 0) return <Carousel ignoreFirstVideo category={cat} />;
-        else return <Carousel category={cat} />;
+        if (i === 0)
+          return <Carousel key={i} ignoreFirstVideo category={cat} />;
+        else return <Carousel key={i} category={cat} />;
       })}
 
       <Footer />
