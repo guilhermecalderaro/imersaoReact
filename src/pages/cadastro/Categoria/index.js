@@ -48,7 +48,7 @@ function CadastroCategoria() {
           label="Descrição"
           type="textarea"
           name="description"
-          value={values.descricao}
+          value={values.description}
           onChange={handleChange}
         />
 
