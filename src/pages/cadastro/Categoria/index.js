@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import PageDefault from "../../../components/PageDefault";
-import FormField from "../../../components/FromField";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import PageDefault from '../../../components/PageDefault';
+import FormField from '../../../components/FromField';
+import Button from '../../../components/Button';
 
 function CadastroCategoria() {
   const initValues = {
-    nome: "",
-    description: "",
-    cor: "",
+    nome: '',
+    description: '',
+    cor: '',
   };
 
   const [categorias, setCategorias] = useState([]);
@@ -21,12 +22,30 @@ function CadastroCategoria() {
   }
 
   function handleChange(e) {
-    setValue(e.target.getAttribute("name"), e.target.value);
+    setValue(e.target.getAttribute('name'), e.target.value);
   }
+
+  useEffect(() => {
+    if (window.location.href.includes('localhost')) {
+      const URL = 'http://localhost:8080/categorias';
+      fetch(URL)
+        .then(async (respostaDoServer) => {
+          if (respostaDoServer.ok) {
+            const resposta = await respostaDoServer.json();
+            setCategorias(resposta);
+            return;
+          }
+          throw new Error('Não foi possível pegar os dados');
+        });
+    }
+  }, []);
 
   return (
     <PageDefault>
-      <h1>Cadastro de Categoria: {values.nome}</h1>
+      <h1>
+        Cadastro de Categoria:
+        {values.nome}
+      </h1>
 
       <form
         onSubmit={(e) => {
@@ -60,16 +79,11 @@ function CadastroCategoria() {
           onChange={handleChange}
         />
 
-        <button>Cadastrar</button>
+        <Button>Cadastrar</Button>
       </form>
 
       <ul>
-        {
-          //console.log(categorias)
-          categorias.map((cat, i) => {
-            return <li key={i}>{cat.nome}</li>;
-          })
-        }
+        {categorias.map((categoria) => (<li key={`${categoria.titulo}`}>{categoria.titulo}</li>))}
       </ul>
 
       <Link to="/">Ir para Home</Link>
